@@ -159,7 +159,7 @@ export class Renderer {
     ctx.translate(-this.width / 2 + this.shakeX, -this.height / 2 + this.shakeY);
 
     this.drawSea(ctx, w, pal);
-    // this.drawScenery(ctx, w); // DEBUG: all scenery disabled
+    this.drawScenery(ctx, w);
     this.drawPickups(ctx, w);
     this.drawEnemies(ctx, w);
     this.drawBullets(ctx, w);
@@ -196,14 +196,14 @@ export class Renderer {
     grad2.addColorStop(0.5, pal.seaA);
     grad2.addColorStop(1, pal.seaA);
     ctx.fillStyle = grad2;
-    ctx.fillRect(0, FIELD_Y, this.width, FIELD_H + 20);
+    ctx.fillRect(0, FIELD_Y, this.width, FIELD_H);
 
     // Matrix wave field. Every crest is a lit dot; everything else is a dim dot.
     // This is the single most expensive pass on screen, so it is quality-gated
     // and allocation-free: brightness is classified inline and drawn at once.
     const cell = this.quality === "low" ? 6 : 3;
     const cols = Math.ceil(this.width / cell);
-    const rows = Math.ceil((FIELD_H + 40) / cell);
+    const rows = Math.ceil(FIELD_H / cell);
     const step = this.quality === "high" ? 1 : 2;
     const dot = cell - 1;
     const scroll = w.scroll;
@@ -467,13 +467,6 @@ export class Renderer {
     ctx.restore();
 
     this.panel.sprite(BANK.player, p.x, p.y, p.bank * 0.6, 1.25, blink, frame);
-
-    // Player glow halo — makes the ship trackable in busy scenes.
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    ctx.globalAlpha = 0.25 * blink;
-    this.panel.sprite(BANK.ring, p.x, p.y, 0, 0.5, 1);
-    ctx.restore();
 
     // Shield bubble.
     if (p.shieldT > 0.02) {
