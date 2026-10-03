@@ -1365,7 +1365,7 @@ export class Engine {
     this.stepParticles(dt);
     this.stepFeel(dt);
     w.vignette = lerp(w.vignette, 0.25, dt * 2);
-    if (w.elapsed === 0 || w.time > 1000) this.startAttract();
+    // startAttract seeds once at boot; stepScenery recycles the scrolling backdrop.
   }
 
   /** Boot a live-looking backdrop for the attract screen. */

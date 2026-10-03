@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { PixelButton, DotRule, FadeIn, Label, Marquee } from "./ui/Chrome";
+import { PixelButton, DotRule, FadeIn, Label } from "./ui/Chrome";
 import { audio } from "@/lib/audio/engine";
 import { getScores, getTotals, type HighScore } from "@/lib/data/save";
 import { formatScore, formatTime } from "@/lib/game/math";
@@ -77,9 +77,7 @@ export default function Attract({
   const top = scores[0];
 
   return (
-    <div className="pointer-events-auto absolute inset-0 z-30 flex flex-col">
-      <Marquee />
-
+    <div className="pointer-events-auto absolute inset-0 z-30 flex flex-col bg-black/25">
       {/* Big wordmark */}
       <div className="mt-[8%] text-center sm:mt-[10%]">
         <FadeIn>
@@ -102,7 +100,7 @@ export default function Attract({
 
       {/* Pitch */}
       <FadeIn delay={0.2}>
-        <p className="mx-auto mt-4 max-w-[19rem] px-4 text-center text-[9px] leading-relaxed text-dim sm:mt-5 sm:max-w-sm sm:text-[10px]">
+        <p className="mx-auto mt-4 max-w-[19rem] px-4 text-center text-[9px] leading-relaxed text-cyan/70 sm:mt-5 sm:max-w-sm sm:text-[10px]">
           Six sectors of Kabal-Ascension sky. Two capital ships that do not
           intend to land. One dot-matrix panel and everything you can fit on it.
         </p>
@@ -151,14 +149,14 @@ export default function Attract({
               {top ? formatScore(top.score) : "—"}
             </div>
           </div>
-          <DotRule className="hidden flex-1 sm:flex" />
+          <DotRule className="hidden min-w-0 flex-1 overflow-hidden sm:flex" />
           <div className="text-center">
             <Label>LAUNCHES</Label>
             <div className="glow-p text-sm font-bold text-phosphor sm:text-base">
               {totals.launches}
             </div>
           </div>
-          <DotRule className="hidden flex-1 sm:flex" />
+          <DotRule className="hidden min-w-0 flex-1 overflow-hidden sm:flex" />
           <div className="text-center">
             <Label>FURTHEST</Label>
             <div className="glow-c text-sm font-bold text-cyan sm:text-base">

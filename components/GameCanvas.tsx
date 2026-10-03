@@ -200,7 +200,8 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
         onFirstGesture();
       }
 
-      const active = getState().screen === "playing" && !pausedRef;
+      const screen = getState().screen;
+      const active = screen === "playing" && !pausedRef;
       if (active) {
         acc += dt;
         let steps = 0;
@@ -215,7 +216,9 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
         engine.step(Math.min(dt, FIXED_DT));
       }
 
-      renderer.draw(engine.world, dt);
+      const backdropOnly = screen === "boot" || screen === "attract" || screen === "brief" ||
+        screen === "hangar" || screen === "scores" || screen === "options";
+      renderer.draw(engine.world, dt, backdropOnly);
 
       // Mirror to the store at ~20Hz for the HUD.
       hudClock += dt;

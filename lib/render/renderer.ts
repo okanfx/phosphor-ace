@@ -139,7 +139,7 @@ export class Renderer {
 
   /* ───────────────────────────────────────────────────────────── draw ──── */
 
-  draw(w: World, dt: number): void {
+  draw(w: World, dt: number, backdropOnly = false): void {
     this.time += dt;
     const ctx = this.sceneCtx;
     ctx.save();
@@ -159,18 +159,20 @@ export class Renderer {
     ctx.translate(-this.width / 2 + this.shakeX, -this.height / 2 + this.shakeY);
 
     this.drawSea(ctx, w, pal);
-    this.drawScenery(ctx, w);
-    this.drawPickups(ctx, w);
-    this.drawEnemies(ctx, w);
-    this.drawBullets(ctx, w);
-    this.drawParticles(ctx, w);
-    this.drawPlayer(ctx, w);
-    this.drawBossBeam(ctx, w);
+    this.drawScenery(ctx, w, backdropOnly);
+    if (!backdropOnly) {
+      this.drawPickups(ctx, w);
+      this.drawEnemies(ctx, w);
+      this.drawBullets(ctx, w);
+      this.drawParticles(ctx, w);
+      this.drawPlayer(ctx, w);
+      this.drawBossBeam(ctx, w);
+    }
     this.drawFieldFrame(ctx, w, pal);
-    this.drawTexts(ctx, w);
+    if (!backdropOnly) this.drawTexts(ctx, w);
     ctx.restore();
 
-    this.drawHud(ctx, w, pal);
+    if (!backdropOnly) this.drawHud(ctx, w, pal);
     ctx.restore();
 
     this.postProcess(w);
@@ -251,14 +253,16 @@ export class Renderer {
 
   /* ───────────────────────────────────────────────────────── scenery ───── */
 
-  private drawScenery(ctx: CanvasRenderingContext2D, s: World): void {
+  private drawScenery(ctx: CanvasRenderingContext2D, s: World, backdropOnly: boolean): void {
     for (const it of s.scenery) {
       if (!it.on) continue;
       if (it.alpha <= 0.02) continue;
 
       const bankId = it.bankId;
+      const cloud = bankId === BANK.cloudFar || bankId === BANK.cloud1 || bankId === BANK.cloud0;
+      if (backdropOnly && !cloud) continue;
       const a = it.alpha * (it.depth >= 1 ? 1 : 0.9);
-      if (bankId === BANK.cloudFar || bankId === BANK.cloud1 || bankId === BANK.cloud0) {
+      if (cloud) {
         this.panel.sprite(bankId, it.x, it.y, 0, it.sc, a * (0.35 + Math.sin(it.t * 0.4) * 0.05), 0);
       } else if (bankId === BANK.searchlight) {
         // A sweeping cone of light across the water.

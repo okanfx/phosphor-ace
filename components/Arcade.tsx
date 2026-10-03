@@ -223,7 +223,7 @@ export default function Arcade() {
                   inputGate={inputGate}
                 />
               </div>
-              <Marquee />
+              {route !== "attract" && <Marquee />}
               <PowerStrip />
             </div>
           </Cabinet>
@@ -326,6 +326,7 @@ function ScreenShell({
         {route === "attract" && booted && (
           <motion.div
             key="attract"
+            className="absolute inset-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
