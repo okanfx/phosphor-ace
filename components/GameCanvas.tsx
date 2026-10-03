@@ -170,21 +170,6 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
     const input = inputRef.current;
     if (!canvas || !engine || !renderer || !input) return;
 
-    const dpr = Math.min(2, typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
-    const fit = () => {
-      const rect = canvas.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width * dpr));
-      const h = Math.max(1, Math.floor(rect.height * dpr));
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-        renderer.resize(w, h);
-      }
-    };
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(canvas);
-
     let raf = 0;
     let last = performance.now();
     let acc = 0;
@@ -266,7 +251,6 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
 
     return () => {
       cancelAnimationFrame(raf);
-      ro.disconnect();
     };
   }, [ready, paused, onFirstGesture]);
 
@@ -312,6 +296,9 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
   return (
     <canvas
       ref={canvasRef}
+      // Keep drawing and input in panel coordinates; CSS handles display sizing.
+      width={PANEL_W}
+      height={PANEL_H}
       className="absolute inset-0 h-full w-full touch-none select-none"
       style={{ imageRendering: "auto" }}
       aria-label="Phosphor Ace game screen"

@@ -77,12 +77,12 @@ export class Renderer {
     this.ctx = ctx;
     this.width = width;
     this.height = height;
-    this.panel = new PanelRenderer(ctx, width, height, bank);
 
     this.scene = document.createElement("canvas");
     this.scene.width = width;
     this.scene.height = height;
     this.sceneCtx = this.scene.getContext("2d")!;
+    this.panel = new PanelRenderer(this.sceneCtx, width, height, bank);
 
     this.bloomA = document.createElement("canvas");
     this.bloomA.width = Math.max(1, Math.floor(width / 4));
@@ -410,7 +410,7 @@ export class Renderer {
   }
 
   private dotRing(x: number, y: number, r: number, color: string, alpha: number): void {
-    const ctx = this.ctx;
+    const ctx = this.sceneCtx;
     ctx.globalAlpha = alpha;
     ctx.fillStyle = color;
     const steps = Math.max(10, Math.min(44, Math.round(r * 1.5)));
@@ -423,7 +423,7 @@ export class Renderer {
   private streak(
     x: number, y: number, vx: number, vy: number, len: number, size: number, color: string, alpha: number,
   ): void {
-    const ctx = this.ctx;
+    const ctx = this.sceneCtx;
     const d = Math.hypot(vx, vy) || 1;
     const nx = vx / d;
     const ny = vy / d;
@@ -698,6 +698,8 @@ export class Renderer {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = 1;
+    // Transparent scene pixels (HUD margin / shake edges) must not retain old frames.
+    ctx.clearRect(0, 0, W, H);
 
     if (this.curvature) {
       this.blitCurved(this.scene, 1);
