@@ -159,7 +159,7 @@ export class Renderer {
     ctx.translate(-this.width / 2 + this.shakeX, -this.height / 2 + this.shakeY);
 
     this.drawSea(ctx, w, pal);
-    this.drawScenery(ctx, w);
+    // this.drawScenery(ctx, w); // DEBUG: all scenery disabled
     this.drawPickups(ctx, w);
     this.drawEnemies(ctx, w);
     this.drawBullets(ctx, w);
