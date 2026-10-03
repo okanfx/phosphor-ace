@@ -1,0 +1,8 @@
+# Phosphor Ace — build artifacts
+.next/
+out/
+node_modules/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.env*.local
