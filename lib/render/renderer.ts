@@ -223,7 +223,7 @@ export class Renderer {
         const crest = wave - 0.62;
         if (crest < -0.06) continue;
         ctx.fillStyle = crest > 0.14 ? pal.crest : pal.seaC;
-        ctx.globalAlpha = crest > 0.14 ? 0.55 : 0.5;
+        ctx.globalAlpha = crest > 0.14 ? 0.32 : 0.28;
         ctx.fillRect(x, y, dot, dot);
       }
     }
@@ -255,10 +255,11 @@ export class Renderer {
     for (const it of s.scenery) {
       if (!it.on) continue;
       if (it.alpha <= 0.02) continue;
+
       const bankId = it.bankId;
       const a = it.alpha * (it.depth >= 1 ? 1 : 0.9);
       if (bankId === BANK.cloudFar || bankId === BANK.cloud1 || bankId === BANK.cloud0) {
-        this.panel.sprite(bankId, it.x, it.y, 0, it.sc, a * (0.7 + Math.sin(it.t * 0.4) * 0.1), 0);
+        this.panel.sprite(bankId, it.x, it.y, 0, it.sc, a * (0.35 + Math.sin(it.t * 0.4) * 0.05), 0);
       } else if (bankId === BANK.searchlight) {
         // A sweeping cone of light across the water.
         ctx.save();
@@ -465,7 +466,14 @@ export class Renderer {
     }
     ctx.restore();
 
-    this.panel.sprite(BANK.player, p.x, p.y, p.bank * 0.6, 1, blink, frame);
+    this.panel.sprite(BANK.player, p.x, p.y, p.bank * 0.6, 1.25, blink, frame);
+
+    // Player glow halo — makes the ship trackable in busy scenes.
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = 0.25 * blink;
+    this.panel.sprite(BANK.ring, p.x, p.y, 0, 0.5, 1);
+    ctx.restore();
 
     // Shield bubble.
     if (p.shieldT > 0.02) {

@@ -257,10 +257,19 @@ export class Engine {
     // Islands (a few carry a shore battery).
     const turrets = this.waveDef.turrets;
     for (let i = 0; i < 5; i++) {
-      const y = -160 + i * 210 + this.rng() * 90;
+      // Keep islands within the visible field — they were spawning below FIELD_BOTTOM
+      // and piling up in the HUD area.
+      const y = -160 + i * 150 + this.rng() * 60;
       const x = 30 + this.rng() * (PANEL_W - 130);
       const bankId = this.rng() < 0.5 ? BANK.island : BANK.carrier;
-      const s = this.pushScenery(x, y, bankId, 1, bankId === BANK.carrier ? 4 : 1, 1);
+      const isCarrier = bankId === BANK.carrier;
+      // Islands are background — keep them subtle (0.45 alpha) so they don't
+      // compete with enemies and the player for visual attention.
+      const s = this.pushScenery(x, y, bankId, 1, 0.7, 0.45);
+      if (s) {
+        // Mark carriers via type directly — the old sc>=4 hack made them render 4x too big.
+        s.type = isCarrier ? 4 : 1;
+      }
       if (s && i < turrets + 1) {
         s.turret = 1;
         s.turretX = bankId === BANK.carrier ? 30 : 34;
@@ -1272,7 +1281,7 @@ export class Engine {
         }
       }
 
-      if (s.y > PANEL_W + FIELD_H + 300) {
+      if (s.y > FIELD_Y + FIELD_H + 80) {
         s.on = false;
         // Recycle scenery so the sky never empties.
         if (s.bankId === BANK.cloudFar) this.pushScenery(Math.random() * PANEL_W, -260, BANK.cloudFar, 0.25, 1, 0.5);
