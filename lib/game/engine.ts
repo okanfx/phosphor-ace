@@ -254,29 +254,9 @@ export class Engine {
     for (let i = 0; i < 4; i++) {
       this.pushScenery(this.rng() * PANEL_W, -200 + this.rng() * 2600, BANK.cloud0, 0.85, 2, 0.85);
     }
-    // Islands (a few carry a shore battery).
-    const turrets = this.waveDef.turrets;
-    for (let i = 0; i < 5; i++) {
-      // Keep islands within the visible field — they were spawning below FIELD_BOTTOM
-      // and piling up in the HUD area.
-      const y = -160 + i * 150 + this.rng() * 60;
-      const x = 30 + this.rng() * (PANEL_W - 130);
-      const bankId = this.rng() < 0.5 ? BANK.island : BANK.carrier;
-      const isCarrier = bankId === BANK.carrier;
-      // Islands are background — keep them subtle (0.45 alpha) so they don't
-      // compete with enemies and the player for visual attention.
-      const s = this.pushScenery(x, y, bankId, 1, 0.7, 0.45);
-      if (s) {
-        // Mark carriers via type directly — the old sc>=4 hack made them render 4x too big.
-        s.type = isCarrier ? 4 : 1;
-      }
-      if (s && i < turrets + 1) {
-        s.turret = 1;
-        s.turretX = bankId === BANK.carrier ? 30 : 34;
-        s.turretY = bankId === BANK.carrier ? 26 : 22;
-        this.attachTurret(s);
-      }
-    }
+    // Islands and carriers: DISABLED — the sprites were rendering at broken scales
+    // and cluttering the play field. Re-enable with proper sizing later.
+    // (Original code spawned 5 islands/carriers here.)
     // Wreckage.
     for (let i = 0; i < 4; i++) {
       this.pushScenery(this.rng() * PANEL_W, -200 + this.rng() * 2600, BANK.wreck, 0.9, 2, 0.6);
