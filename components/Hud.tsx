@@ -58,6 +58,15 @@ export function Hud() {
             <span key={i} className="h-1.5 w-1.5 bg-phosphor shadow-[0_0_6px_#3bffb0]" />
           ))}
         </div>
+        {/* Touch bomb button — only on coarse pointers. Keyboard users press L. */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("phosphor-bomb"))}
+          className="pointer-events-auto hidden h-14 w-14 items-center justify-center rounded-full border-2 border-amber/60 bg-amber/10 text-lg text-amber shadow-[0_0_12px_rgba(255,225,77,0.3)] active:bg-amber/30 [@media(pointer:coarse)]:flex"
+          aria-label="Drop bomb"
+        >
+          ✸
+        </button>
         <div className="flex gap-1">
           {Array.from({ length: Math.min(5, hud.bombs) }).map((_, i) => (
             <span key={i} className="h-1.5 w-1.5 bg-amber shadow-[0_0_6px_#ffe14d]" />

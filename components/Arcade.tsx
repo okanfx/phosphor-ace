@@ -57,7 +57,10 @@ export default function Arcade() {
   useEffect(() => {
     const s = getSettings();
     setCallsign(sanitizeCallsign("ACE"));
-    setCabinet(s.crtCabinet ?? true);
+    // On phones, default to panel mode (no cabinet chrome) so the game fills the screen.
+    // Users can still toggle the cabinet via the button.
+    const isPhone = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+    setCabinet(s.crtCabinet ?? !isPhone);
     // Detect touch once so we can nudge the copy.
     if (typeof window !== "undefined" && "ontouchstart" in window) {
       // touch flag intentionally unused in copy; keep detection for future overlays

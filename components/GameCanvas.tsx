@@ -270,6 +270,19 @@ export default function GameCanvas({ runToken, endless, paused, onRunEnd, onFirs
     };
   }, [ready, paused, onFirstGesture]);
 
+  /* ── touch bomb button: Hud dispatches "phosphor-bomb", we fire it ── */
+  useEffect(() => {
+    if (!ready) return;
+    const h = () => {
+      const engine = engineRef.current;
+      if (engine && getState().screen === "playing") {
+        engine.requestBomb();
+      }
+    };
+    window.addEventListener("phosphor-bomb", h);
+    return () => window.removeEventListener("phosphor-bomb", h);
+  }, [ready]);
+
   /* ── pause state mirror ───────────────────────────────────────────────── */
   const handlePause = useCallback((v: boolean) => {
     const engine = engineRef.current;

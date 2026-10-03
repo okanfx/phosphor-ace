@@ -106,6 +106,14 @@ export default function Attract({
           Six sectors of Kabal-Ascension sky. Two capital ships that do not
           intend to land. One dot-matrix panel and everything you can fit on it.
         </p>
+        {/* Touch how-to-play — only on coarse pointers */}
+        <p className="mx-auto mt-2 hidden max-w-[19rem] px-4 text-center text-[9px] leading-relaxed text-cyan/80 [@media(pointer:coarse)]:block">
+          👆 DRAG to fly · AUTO-FIRE is on · Tap ✸ for bomb
+        </p>
+        {/* Keyboard how-to-play — only on fine pointers */}
+        <p className="mx-auto mt-2 hidden max-w-[19rem] px-4 text-center text-[9px] leading-relaxed text-cyan/80 [@media(pointer:fine)]:block">
+          ⌨ ARROWS/WASD to fly · SPACE/J to fire · L for bomb · SHIFT for focus
+        </p>
       </FadeIn>
 
       {/* Menu */}
@@ -159,7 +167,8 @@ export default function Attract({
           </div>
         </div>
         <div className="mt-3 text-center text-[7px] tracking-[0.24em] text-dim/60">
-          ↑↓ SELECT · ENTER LAUNCH · OKANFXLABS AI DESIGN LABS
+          <span className="[@media(pointer:coarse)]:hidden">↑↓ SELECT · ENTER LAUNCH · OKANFXLABS AI DESIGN LABS</span>
+          <span className="hidden [@media(pointer:coarse)]:inline">TAP TO SELECT · OKANFXLABS AI DESIGN LABS</span>
         </div>
       </div>
 
